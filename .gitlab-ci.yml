@@ -1,0 +1,17 @@
+stages:          
+  - release
+
+create-release:       
+  stage: release
+  image: artifactory.otxlab.net/ot2-paas/golang:1.18.6-bullseye
+  tags:
+    - ubmcluster
+  script:
+    - GOOS=windows GOARCH=amd64 go build -o otgke.exe
+    - GOOS=darwin GOARCH=amd64 go build -o otgke_mac
+    - go build
+    - curl -H 'X-JFrog-Art-Api:'$ARTIFACT_KEY -T otgke "https://artifactory.otxlab.net/artifactory/ot2-paas/gcp/otgke"
+    - curl -H 'X-JFrog-Art-Api:'$ARTIFACT_KEY -T otgke.exe "https://artifactory.otxlab.net/artifactory/ot2-paas/gcp/otgke.exe"
+    - curl -H 'X-JFrog-Art-Api:'$ARTIFACT_KEY -T otgke_mac "https://artifactory.otxlab.net/artifactory/ot2-paas/gcp/otgke_mac"
+  when: manual
+    
