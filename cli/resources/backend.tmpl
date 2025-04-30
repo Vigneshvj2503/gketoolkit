@@ -1,0 +1,6 @@
+terraform {
+  backend "gcs" {
+    bucket = "{{.Bucket}}"
+    prefix = "tf/gcp/state"
+  }
+}
